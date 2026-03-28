@@ -61,7 +61,7 @@ exports.signin = async (req, res) => {
       message: "Signed in successfully",
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
+    console.error("Sign In Error : ",err);
+    res.status(500).json({ error: "Server error", details: err.message });
   }
 };
