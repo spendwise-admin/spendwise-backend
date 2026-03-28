@@ -6,9 +6,19 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
+const allowedOrigins = [ "https://spendwise-frontend-bice.vercel.app",
+  "https://spendwise-68fe2ib7e-swapnil-kirnayakes-projects.vercel.app"
+];
 app.use(cors({
-  origin: ["https://spendwise-frontend-bice.vercel.app",
-           "https://spendwise-frontend-pw0is7qgb-swapnil-kirnayakes-projects.vercel.app"],
+   origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
