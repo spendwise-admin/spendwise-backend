@@ -29,7 +29,7 @@ app.use("/uploads", express.static("uploads"));
 const MONGO_URI =
   process.env.MONGO_URI;
 if (!MONGO_URI) {
-  console.error("❌ MONGO_URI not found");
+  console.error(" MONGO_URI not found");
   process.exit(1);
 }
 
@@ -47,3 +47,6 @@ app.use("/api", expenseRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, "0.0.0.0", () => console.log(`Server running on port ${port}`));
+mongoose.connection.once("open", () => {
+  console.log(" Connected DB:", mongoose.connection.name);
+});
