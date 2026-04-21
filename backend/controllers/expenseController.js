@@ -3,7 +3,6 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const multer = require("multer");
-const path = require("path");
 
 const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret"; // Use same secret as authController
 
@@ -27,16 +26,7 @@ const verifyToken = (req, res, next) => {
 };
 
 // Multer storage config for receipt uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueName =
-      "receipt-" + Date.now() + path.extname(file.originalname);
-    cb(null, uniqueName);
-  },
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage: storage,
@@ -57,7 +47,8 @@ const createExpense = async (req, res) => {
     // Handle uploaded receipt file (if any)
     let receiptPath = null;
     if (req.file) {
-      receiptPath = `/uploads/${req.file.filename}`;
+      const base64 = req.file.buffer.toString("base64");
+      receiptPath = `data:${req.file.mimetype};base64,${base64}`;
     }
 
     // Ensure date is properly converted to Date object
