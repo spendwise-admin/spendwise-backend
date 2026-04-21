@@ -24,7 +24,6 @@ app.use(cors({
 }));
 app.options("*", cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
 
 const MONGO_URI =
   process.env.MONGO_URI;
